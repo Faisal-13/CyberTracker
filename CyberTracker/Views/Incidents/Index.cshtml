@@ -13,7 +13,8 @@
             <th>Status</th>
             <th>Reported By</th>
             <th>Date</th>
-            <th>Actions</th>
+            <th>Quick Actions</th>
+            <th>Manage</th>
         </tr>
     </thead>
     <tbody>
@@ -22,24 +23,57 @@
             <tr>
                 <td>@item.Title</td>
                 <td>
-                    @* Simple badge coloring based on severity *@
-                    <span class="badge bg-@(item.Severity == "Critical" ? "danger" : "info")">
+                    <span class="badge bg-@(item.Severity == "Critical" ? "danger" : (item.Severity == "High" ? "warning" : "info"))">
                         @item.Severity
                     </span>
                 </td>
-                <td>@item.Status</td>
+                <td>
+                    <span class="badge bg-@(item.Status == "Resolved" ? "success" : "secondary")">
+                        @item.Status
+                    </span>
+                </td>
                 <td>@(item.Reporter?.Email ?? "Unknown")</td>
                 <td>@item.CreatedAt.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
 
-                    @if (User.IsInRole("Admin"))
+                <td>
+                    @if (User.IsInRole("Admin") && item.Status != "Resolved" && item.Status != "Closed")
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        <form asp-action="ChangeStatus" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+
+                            @if (item.Status == "Open")
+                            {
+                                <input type="hidden" name="newStatus" value="In Progress" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Start Work</button>
+                            }
+                            else if (item.Status == "In Progress")
+                            {
+                                <input type="hidden" name="newStatus" value="Resolved" />
+                                <button type="submit" class="btn btn-sm btn-outline-success">Resolve</button>
+                            }
+                        </form>
                     }
+                </td>
+
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light border">Details</a>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        }
+                    </div>
                 </td>
             </tr>
         }
     </tbody>
+    <form asp-action="Index" method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="searchString" class="form-control" placeholder="Search by title or description..." value="@ViewData["CurrentFilter"]" />
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+        </div>
+    </form>
 </table>

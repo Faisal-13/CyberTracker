@@ -13,5 +13,6 @@ namespace CyberTracker.Data
         }
 
         public DbSet<Incident> Incidents { get; set; }
+        public DbSet<SecurityTip> SecurityTips { get; set; }
     }
 }

@@ -21,11 +21,23 @@ namespace CyberTracker.Controllers
         }
 
         // GET: Incidents
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            // Include the Reporter data so we can show their email in the list
-            var incidents = await _context.Incidents.Include(i => i.Reporter).ToListAsync();
-            return View(incidents);
+            // Save the search term in ViewData so the textbox keeps the value after searching
+            ViewData["CurrentFilter"] = searchString;
+
+            var incidents = from i in _context.Incidents.Include(i => i.Reporter)
+                            select i;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                // Filter: Check if Title OR Description contains the search text
+                incidents = incidents.Where(s => s.Title.Contains(searchString)
+                                              || s.Description.Contains(searchString));
+            }
+
+            // Sort by newest first
+            return View(await incidents.OrderByDescending(i => i.CreatedAt).ToListAsync());
         }
 
         // GET: Incidents/Details/5
@@ -128,6 +140,23 @@ namespace CyberTracker.Controllers
             return View(incident);
         }
 
+        // POST: Incidents/ChangeStatus
+        [HttpPost]
+        [Authorize(Roles = "Admin")] // Only Admins can change status quickly
+        public async Task<IActionResult> ChangeStatus(int id, string newStatus)
+        {
+            var incident = await _context.Incidents.FindAsync(id);
+            if (incident == null)
+            {
+                return NotFound();
+            }
+
+            incident.Status = newStatus;
+            _context.Update(incident);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
         // POST: Incidents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

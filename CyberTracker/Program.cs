@@ -11,10 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // 2. Identity Configuration (Enable Roles!)
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8; // Your rule from before!
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>{ options.Password.RequireDigit = true; options.Password.RequiredLength = 8; // Your rule from before!
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();

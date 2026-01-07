@@ -1,8 +1,124 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Cyber Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-5">
+    <h1 class="display-4">Cyber Incident Command Center</h1>
+    <p class="lead">Real-time tracking and security awareness.</p>
 </div>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">Incidents by Severity</div>
+            <div class="card-body">
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">Status Overview</div>
+            <div class="card-body">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+@model IEnumerable<CyberTracker.Models.SecurityTip>
+
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-3 border-bottom pb-2">🛡️ Security Awareness Feed</h2>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var tip in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-primary">
+                    <div class="card-header bg-transparent border-primary">
+                        <strong>@tip.Title</strong>
+                        <span class="badge bg-secondary float-end">@tip.KnowledgeLevel</span>
+                    </div>
+                    <div class="card-body text-primary">
+                        <p class="card-text">@tip.Content</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-primary text-muted">
+                        Posted: @tip.PostedDate.ToShortDateString()
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No security tips posted yet. Stay safe!
+        </div>
+    }
+</div>
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="text-center mt-3">
+        <a asp-controller="SecurityTips" asp-action="Create" class="btn btn-outline-dark">Add New Tip (Admin Only)</a>
+    </div>
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // 1. Severity Chart (Pie)
+           Chart.defaults.color = '#c9d1d9'; // Light grey text for all charts
+        Chart.defaults.borderColor = '#30363d'; // Dark grey grid lines
+
+        // 1. Severity Chart
+        const ctxSeverity = document.getElementById('severityChart').getContext('2d');
+        new Chart(ctxSeverity, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.SeverityLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(ViewBag.SeverityCounts)),
+                    backgroundColor: ['#da3633', '#d29922', '#2f81f7', '#238636'], // Red, Yellow, Blue, Green (Cyber colors)
+                    borderColor: '#0f111a', // Match background color for cleaner edges
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // 2. Status Chart
+        const ctxStatus = document.getElementById('statusChart').getContext('2d');
+        new Chart(ctxStatus, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.StatusLabels)),
+                datasets: [{
+                    label: 'Status Count',
+                    data: @Html.Raw(Json.Serialize(ViewBag.StatusCounts)),
+                    backgroundColor: '#2f81f7',
+                    borderColor: '#2f81f7',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false } // Hide legend for single-color bar chart
+                }
+            }
+        });
+    </script>
+}

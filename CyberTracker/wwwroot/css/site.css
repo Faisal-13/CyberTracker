@@ -1,22 +1,91 @@
-html {
-  font-size: 14px;
+/* Import a tech-looking font (optional) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+html, body {
+    background-color: #0f111a; /* Deep Cyber Blue/Black */
+    color: #c9d1d9; /* Soft White text */
+    font-family: 'Inter', sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Headings get a monospace font for that "Terminal" look */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: -0.5px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+a {
+    color: #58a6ff; /* Cyan/Blue links */
+    text-decoration: none;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+    a:hover {
+        color: #79c0ff;
+        text-decoration: underline;
+    }
+
+/* --- Dark Cards --- */
+.card {
+    background-color: #161b22; /* Darker grey for cards */
+    border: 1px solid #30363d;
+    color: #c9d1d9;
 }
 
-body {
-  margin-bottom: 60px;
+.card-header {
+    background-color: #21262d;
+    border-bottom: 1px solid #30363d;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* --- Dark Inputs & Forms --- */
+.form-control, .form-select {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: #0d1117;
+        color: #ffffff;
+        border-color: #58a6ff;
+        box-shadow: 0 0 0 0.25rem rgba(88, 166, 255, 0.25);
+    }
+
+/* Fix placeholder text color */
+::placeholder {
+    color: #6e7681 !important;
+}
+
+/* --- Dark Tables --- */
+.table {
+    color: #c9d1d9;
+    --bs-table-bg: transparent; /* Keep background transparent */
+}
+
+    .table thead th {
+        border-bottom: 2px solid #30363d;
+        color: #58a6ff; /* Neon blue headers */
+    }
+
+    .table td, .table th {
+        border-top: 1px solid #21262d;
+    }
+
+/* --- Buttons --- */
+.btn-primary {
+    background-color: #238636; /* GitHub Green */
+    border-color: #238636;
+}
+
+    .btn-primary:hover {
+        background-color: #2ea043;
+        border-color: #2ea043;
+    }
+
+/* --- Footer --- */
+.footer {
+    background-color: #161b22;
+    border-top: 1px solid #30363d;
+    color: #8b949e;
 }
