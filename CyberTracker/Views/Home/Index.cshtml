@@ -63,7 +63,11 @@
 @if (User.IsInRole("Admin"))
 {
     <div class="text-center mt-3">
-        <a asp-controller="SecurityTips" asp-action="Create" class="btn btn-outline-dark">Add New Tip (Admin Only)</a>
+        <a asp-controller="SecurityTips" asp-action="Create"
+           class="btn btn-success btn-lg"
+           style="background-color: #28a745 !important; border-color: #28a745 !important; color: white !important;">
+            Add New Tip (Admin Only)
+        </a>
     </div>
 }
 @section Scripts {

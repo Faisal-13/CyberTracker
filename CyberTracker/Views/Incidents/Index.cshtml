@@ -2,11 +2,33 @@
 
 <h2>Cyber Security Incidents</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Report New Incident</a>
-</p>
-<table class="table table-striped">
-    <thead>
+<div class="row mb-3 align-items-center">
+    <div class="col-md-6">
+        <a asp-action="Create"
+           style="background-color: #009933 !important;
+                  color: white !important;
+                  padding: 10px 20px;
+                  text-decoration: none;
+                  border-radius: 5px;
+                  border: 2px solid #009933;
+                  font-weight: bold;
+                  display: inline-block;">
+            Report New Incident
+        </a>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex justify-content-end">
+            <div class="input-group">
+                <input type="text" name="searchString" class="form-control" placeholder="Search by title..." value="@ViewData["CurrentFilter"]" />
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead class="table-dark">
         <tr>
             <th>Title</th>
             <th>Severity</th>
@@ -69,11 +91,4 @@
             </tr>
         }
     </tbody>
-    <form asp-action="Index" method="get" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="searchString" class="form-control" placeholder="Search by title or description..." value="@ViewData["CurrentFilter"]" />
-            <button type="submit" class="btn btn-outline-primary">Search</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
-        </div>
-    </form>
 </table>

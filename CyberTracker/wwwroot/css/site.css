@@ -2,9 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap');
 
 html, body {
-    background-color: #0f111a; /* Deep Cyber Blue/Black */
-    color: #c9d1d9; /* Soft White text */
+    background-color: #0f111a;
+    color: #c9d1d9;
     font-family: 'Inter', sans-serif;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1; 
 }
 
 /* Headings get a monospace font for that "Terminal" look */
@@ -84,8 +92,26 @@ a {
     }
 
 /* --- Footer --- */
-.footer {
-    background-color: #161b22;
-    border-top: 1px solid #30363d;
-    color: #8b949e;
+/*.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}*/
+
+
+/* Force navbar links to be light grey */
+.navbar-dark .navbar-nav .nav-link {
+    color: #c9d1d9 !important; /* Use !important to override Bootstrap defaults */
+}
+
+    /* Make them white when you hover over them */
+    .navbar-dark .navbar-nav .nav-link:hover {
+        color: #ffffff !important;
+    }
+
+/* Fix the "Hello, User!" text color */
+.navbar-text {
+    color: #c9d1d9 !important;
 }
